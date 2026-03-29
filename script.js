@@ -66,33 +66,38 @@ function draw() {
   //   ctx.fillRect(part.x * gridSize, part.y * gridSize, gridSize - 2, gridSize - 2);
   // });
   snake.forEach((part, index) => {
-  // Gradient / rainbow effect
+  // Color gradient for fun
   const hue = (index * 20 + performance.now() / 10) % 360;
   ctx.fillStyle = `hsl(${hue}, 80%, 50%)`;
 
-  // Draw triangle pointing in the movement direction
   const x = part.x * gridSize + gridSize / 2;
   const y = part.y * gridSize + gridSize / 2;
 
-  ctx.beginPath();
-  
-  // Determine triangle orientation based on velocity (for the head)
-  let angle = 0;
+  // Compute direction
+  let dx = 0;
+  let dy = 0;
+
   if (index === 0) {
-    if (velocity.x === 1) angle = 0;        // Right
-    else if (velocity.x === -1) angle = Math.PI; // Left
-    else if (velocity.y === 1) angle = Math.PI/2; // Down
-    else if (velocity.y === -1) angle = -Math.PI/2; // Up
+    // Head uses velocity
+    dx = velocity.x;
+    dy = velocity.y;
+  } else {
+    // Body uses vector from previous segment
+    dx = snake[index - 1].x - part.x;
+    dy = snake[index - 1].y - part.y;
   }
 
-  // Triangle points
-  ctx.moveTo(x + gridSize/2 * Math.cos(angle), y + gridSize/2 * Math.sin(angle));
-  ctx.lineTo(x + gridSize/2 * Math.cos(angle + 2.5), y + gridSize/2 * Math.sin(angle + 2.5));
-  ctx.lineTo(x + gridSize/2 * Math.cos(angle - 2.5), y + gridSize/2 * Math.sin(angle - 2.5));
+  // Compute angle
+  const angle = Math.atan2(dy, dx);
+
+  // Draw triangle
+  ctx.beginPath();
+  ctx.moveTo(x + gridSize / 2 * Math.cos(angle), y + gridSize / 2 * Math.sin(angle));
+  ctx.lineTo(x + gridSize / 2 * Math.cos(angle + 2.5), y + gridSize / 2 * Math.sin(angle + 2.5));
+  ctx.lineTo(x + gridSize / 2 * Math.cos(angle - 2.5), y + gridSize / 2 * Math.sin(angle - 2.5));
   ctx.closePath();
   ctx.fill();
 });
-
   // Food
   ctx.fillStyle = "red";
   ctx.fillRect(food.x * gridSize, food.y * gridSize, gridSize - 2, gridSize - 2);
