@@ -140,4 +140,4 @@ document.addEventListener("keydown", e => {
 restartBtn.addEventListener("click", resetGame);
 
 // Start game loop
-setInterval(gameLoop, 150);
+setInterval(gameLoop, 300);
