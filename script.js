@@ -19,6 +19,9 @@ function gameLoop() {
 }
 
 function update() {
+  // 🚫 Do nothing until player starts moving
+  if (velocity.x === 0 && velocity.y === 0) return;
+
   const head = {
     x: snake[0].x + velocity.x,
     y: snake[0].y + velocity.y
@@ -33,9 +36,9 @@ function update() {
     return;
   }
 
-  // Self collision
-  for (let part of snake) {
-    if (part.x === head.x && part.y === head.y) {
+  // Self collision (skip checking the new head position)
+  for (let i = 1; i < snake.length; i++) {
+    if (snake[i].x === head.x && snake[i].y === head.y) {
       resetGame();
       return;
     }
